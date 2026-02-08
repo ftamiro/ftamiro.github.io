@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francesco Tamiro, PhD | Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --accent: #00d2ff; --bg: #050505; --card-bg: #111111; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        #canvas-container { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; }
+        section { padding: 40px 0; display: flex; align-items: center; }
+        .glass-panel { 
+            background: rgba(18, 22, 35, 0.8); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(0, 210, 255, 0.15); 
+            border-radius: 20px; 
+            padding: 40px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .glass-panel:hover {
+            border-color: rgba(0, 210, 255, 0.25);
+            box-shadow: 0 4px 30px rgba(0, 210, 255, 0.06);
+        }
+        .nav-link { color: rgba(255,255,255,0.6) !important; transition: 0.3s; }
+        .nav-link:hover { color: var(--accent) !important; }
+        .highlight { color: var(--accent); font-weight: bold; }
+        .chart-container { position: relative; height: 300px; width: 100%; }
+        .pub-card { 
+            background: rgba(18, 22, 35, 0.8); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(0, 210, 255, 0.12); 
+            border-left: 3px solid var(--accent); 
+            border-radius: 12px; 
+            padding: 24px 28px; 
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .pub-card:hover { transform: translateY(-3px); border-left-color: #fff; }
+        .pub-card .pub-title { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+        .pub-card .pub-journal { color: var(--accent); font-size: 0.85rem; font-weight: 500; }
+        .pub-card .pub-meta { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 10px; }
+        .pub-card .pub-role { display: inline-block; font-size: 0.7rem; padding: 2px 10px; border-radius: 20px; font-weight: 600; }
+        .pub-role.first-author { background: rgba(0,210,255,0.15); color: var(--accent); }
+        .pub-role.middle-author { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+        .pub-if { display: inline-block; font-size: 0.75rem; padding: 2px 10px; border-radius: 20px; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); margin-left: 6px; }
+        .skill-badge { 
+            display: inline-block; 
+            padding: 4px 12px; 
+            margin: 4px; 
+            border: 1px solid rgba(255,255,255,0.15); 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
+            color: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.03);
+            transition: 0.3s;
+        }
+        .skill-badge:hover { border-color: var(--accent); color: white; background: rgba(0,210,255,0.05); }
+        .skill-group-title { font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-top: 20px; margin-bottom: 10px; }
+        .profile-container { position: relative; width: 280px; height: 280px; margin: 0 auto; }
+        .profile-pic { 
+            width: 100%; height: 100%; object-fit: cover; border-radius: 50%; 
+            border: 3px solid var(--accent); 
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .profile-container:hover .profile-pic { 
+            box-shadow: 0 0 50px rgba(0, 210, 255, 0.8); 
+            transform: scale(1.03); 
+            border-color: white;
+        }
+        .text-secondary { color: rgba(255,255,255,0.6) !important; }
+        .project-category {
+            display: inline-block;
+            padding: 4px 14px;
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        .contact-card {
+            background: rgba(18, 22, 35, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 210, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            height: 100%;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .contact-card:hover {
+            border-color: rgba(0, 210, 255, 0.25);
+            box-shadow: 0 4px 30px rgba(0, 210, 255, 0.06);
+        }
+        .contact-email {
+            display: block;
+            padding: 16px 24px;
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            border-radius: 12px;
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            text-align: center;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: #050505;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 100%;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .btn-accent:hover {
+            background: #33ddff;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        .social-link:hover { color: var(--accent); }
+        .social-link svg { width: 24px; height: 24px; fill: currentColor; }
+        footer {
+            padding: 40px 0 30px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        footer a { color: rgba(255,255,255,0.5); text-decoration: none; transition: 0.3s; }
+        footer a:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<nav class="navbar navbar-expand-lg fixed-top px-4">
+    <a class="navbar-brand fw-bold text-white" href="#">FTAMIRO<span class="highlight">.</span></a>
+    <div class="ms-auto d-flex">
+        <a class="nav-link px-3" href="#home">Home</a>
+        <a class="nav-link px-3" href="#achievements">Impact</a>
+        <a class="nav-link px-3" href="#projects">Work</a>
+        <a class="nav-link px-3" href="#publications">Publications</a>
+        <a class="nav-link px-3" href="#personal">Personal</a>
+        <a class="nav-link px-3" href="#contact">Contact</a>
+    </div>
+</nav>
+
+<section id="home">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-4 order-lg-2" data-aos="fade-left">
+                <div class="profile-container">
+                    <img src="linkedin_propic.jpg" alt="Francesco Tamiro" class="profile-pic">
+                </div>
+            </div>
+            <div class="col-lg-8 order-lg-1" data-aos="fade-right">
+                <p class="mb-0 highlight">Biomedical Data Scientist II</p>
+                <h1 class="display-1 fw-bold">Francesco Tamiro</h1>
+                <p class="lead text-secondary mt-2">AI & Biomedical Data Science Architect with deep expertise in <span class="text-white">single-cell genomics</span> and <span class="text-white">NGS pipelines</span>. Specialized in translating complex computational analyses into production-grade, AI-first, FAIR-compliant <span class="text-white">data platforms & infrastructure</span> that democratize advanced bioinformatics for researchers, clinicians, and the broader scientific community. <span class="text-white">EB-1A (Extraordinary Ability, First Preference) Green Card Holder</span>.</p>
+                
+                <div class="mt-4 skills-header">
+                    <div class="skill-group">
+                        <div class="skill-group-title">Programming & Tools</div>
+                        <div class="skill-badge">Azure</div>
+                        <div class="skill-badge">React</div>
+                        <div class="skill-badge">R</div>
+                        <div class="skill-badge">Python</div>
+                        <div class="skill-badge">Bash</div>
+                        <div class="skill-badge">Nextflow</div>
+                        <div class="skill-badge">HPC</div>
+                        <div class="skill-badge">Git</div>
+                    </div>
+                    
+                    <div class="skill-group">
+                        <div class="skill-group-title">Data Science & Bioinformatics</div>
+                        <div class="skill-badge">Machine Learning</div>
+                        <div class="skill-badge">AI</div>
+                        <div class="skill-badge">Deep Learning</div>
+                        <div class="skill-badge">RNA-seq</div>
+                        <div class="skill-badge">ChIP-seq</div>
+                        <div class="skill-badge">Cut&Run</div>
+                        <div class="skill-badge">ATAC-seq</div>
+                        <div class="skill-badge">single-cell RNA-seq</div>
+                        <div class="skill-badge">multi-omics single-cell</div>
+                        <div class="skill-badge">high throughput flow cytometry</div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <a href="#projects" class="btn btn-outline-info rounded-pill px-4 py-2">View Portfolio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="achievements">
+    <div class="container">
+        <div class="glass-panel" data-aos="fade-up">
+            <h2 class="mb-5">A History of Consistent <span class="highlight">Extraordinary Impact</span></h2>
+            <div class="row g-5">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Academic Excellence</h5>
+                    <p class="small text-white">Exam Average (Out of 30) vs. National STEM Avg.</p>
+                    <div class="chart-container">
+                        <canvas id="gradesChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="mb-3">Time Efficiency</h5>
+                    <p class="small text-white">Years to Degree Completion (Lower is better).</p>
+                    <div class="chart-container">
+                        <canvas id="speedChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 text-center">
+                <p class="small text-white">Benchmarked against <span class="text-white">Almalaurea National Data</span> for Biology cohorts.</p>
+            </div>
+            <div class="mt-4">
+                <ul class="text-start">
+                    <li class="mb-2"><strong>Exceptional Efficiency:</strong> Completed the Bachelor's degree in 2.75 years, significantly outperforming the national average of 5.1 years for the same cohort (a 46% time reduction).</li>
+                    <li class="mb-2"><strong>Accelerated Master's Path:</strong> Finished the Master's degree in just 1.73 years (631 days), compared to the national benchmark of 2.7 years (36% faster than the average).</li>
+                    <li class="mb-2"><strong>Accelerated Excellence:</strong> Demonstrated a consistent ability to navigate complex STEM curricula at approximately twice the speed of the national student population while maintaining top-tier grades. Awarded University Excellence Prize annually for ranking in the top 5% of students and Regional Degree Prize upon graduation.</li>
+                </ul>
+            </div>
+            <div class="row g-5 mt-5">
+                <div class="col-md-6">
+                    <h5 class="mb-3">PhD Funding & Salary Benchmark</h5>
+                    <p class="small text-white">Annual gross salary comparison (€).</p>
+                    <div class="chart-container">
+                        <canvas id="fundingChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="mb-3">Publication Impact Factor Benchmarks</h5>
+                    <p class="small text-white">Average Impact Factor per publication.</p>
+                    <div class="chart-container">
+                        <canvas id="ifChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 text-center">
+                <p class="text-white" style="font-size: 0.75rem; opacity: 0.8;">Benchmarked against <span class="text-white">MUR Decree n. 40/2018, ADI Surveys (2019-2021), Clarivate JCR 2021, ANVUR VQR 2015-2019, and Ministero della Salute 2021 Report</span>.</p>
+            </div>
+            <div class="mt-4">
+                <ul class="text-start">
+                    <li class="mb-2"><strong>Competitive PhD Funding:</strong> Earned €30,000/year during PhD, 95.5% higher than the national average of €15,343.28. Top 1% of financed research with market value double that of peers.</li>
+                    <li class="mb-2"><strong>Publication Impact Excellence:</strong> Research output exceeded global/national averages (IF 3.8-4.9), University of Rome Tor Vergata benchmark (IF 5.45), and IRCCS Casa Sollievo della Sofferenza standards (IF 6.81).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="projects">
+    <div class="container">
+        <h2 class="mb-5" data-aos="fade-left">Data Science <span class="highlight">Projects</span></h2>
+        <div class="row g-4">
+            <div class="col-md-6" data-aos="zoom-in">
+                <div class="glass-panel h-100">
+                    <span class="project-category">CLOUD INFRASTRUCTURE &bull; PRODUCTION</span>
+                    <h3 class="h4">Sylvester Data Portal</h3>
+                    <p class="text-secondary">Leading production pipeline integration across Azure cloud, on-premise, and HPC environments. Specializing in AI integration for research workflows, advanced analytical microservices, and modular tertiary bioinformatics solutions for cancer research.</p>
+                    <span class="badge bg-dark border border-info">Azure</span>
+                    <span class="badge bg-dark border border-info">R</span>
+                    <span class="badge bg-dark border border-info">Python</span>
+                    <span class="badge bg-dark border border-info">Bash</span>
+                    <span class="badge bg-dark border border-info">Nextflow</span>
+                    <span class="badge bg-dark border border-info">Cromwell</span>
+                    <span class="badge bg-dark border border-info">React</span>
+                    <span class="badge bg-dark border border-info">AI Integration</span>
+                </div>
+            </div>
+            <div class="col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                <div class="glass-panel h-100">
+                    <span class="project-category">STEALTH &bull; AI AGENTIC</span>
+                    <h3 class="h4">AI Agentic Framework <span class="badge bg-danger ms-2" style="font-size: 0.6rem;">STEALTH</span></h3>
+                    <p class="text-secondary">Advanced AI agentic framework for modular tertiary bioinformatic analysis. Automation-first architecture enabling intelligent research workflows and dynamic analytical pipelines.</p>
+                    <span class="badge bg-dark border border-info">Python</span>
+                    <span class="badge bg-dark border border-info">R</span>
+                    <span class="badge bg-dark border border-info">Bash</span>
+                    <span class="badge bg-dark border border-info">LangChain</span>
+                    <span class="badge bg-dark border border-info">OpenAI SDK</span>
+                    <span class="badge bg-dark border border-info">Shiny</span>
+                </div>
+            </div>
+            <div class="col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                <div class="glass-panel h-100">
+                    <span class="project-category">DATA SCIENCE &bull; GENOMICS</span>
+                    <h3 class="h4">Genomic Landscape Analyses</h3>
+                    <p class="text-secondary">Comprehensive multi-omics data integration and visualization for biomedical research cohorts.</p>
+                    <span class="badge bg-dark border border-info">R</span>
+                    <span class="badge bg-dark border border-info">Python</span>
+                    <span class="badge bg-dark border border-info">Shiny</span>
+                    <span class="badge bg-dark border border-info">Jupyter</span>
+                    <span class="badge bg-dark border border-info">ML</span>
+                    <span class="badge bg-dark border border-info">ComplexHeatmap</span>
+                </div>
+            </div>
+            <div class="col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                <div class="glass-panel h-100">
+                    <span class="project-category">VISUALIZATION &bull; SINGLE-CELL</span>
+                    <h3 class="h4">Single Cell Visualizer</h3>
+                    <p class="text-secondary">Interactive tool for basic representation of adata objects, designed for quick sharing and collaborative result screening.</p>
+                    <span class="badge bg-dark border border-info">Python</span>
+                    <span class="badge bg-dark border border-info">Streamlit</span>
+                    <span class="badge bg-dark border border-info">Shiny for Python</span>
+                    <span class="badge bg-dark border border-info">AnnData</span>
+                    <span class="badge bg-dark border border-info">Plotly</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="publications">
+    <div class="container">
+        <h2 class="mb-5" data-aos="fade-left">Selected <span class="highlight">Publications</span></h2>
+        <div class="row g-3">
+            <div class="col-12" data-aos="fade-up">
+                <div class="pub-card">
+                    <div class="pub-title">NOTCH1 dimeric signaling is essential for T-cell leukemogenesis and leukemia maintenance</div>
+                    <div class="pub-journal">Blood</div>
+                    <div class="pub-meta">
+                        <span class="pub-role first-author">First Author</span>
+                        <span class="pub-if">IF: 23.1</span>
+                        <span class="pub-if">2025</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" data-aos="fade-up" data-aos-delay="50">
+                <div class="pub-card">
+                    <div class="pub-title">The SWI/SNF chromatin-remodeling subunit DPF2 facilitates NRF2-dependent anti-inflammatory and antioxidant gene expression</div>
+                    <div class="pub-journal">The Journal of Clinical Investigation (JCI)</div>
+                    <div class="pub-meta">
+                        <span class="pub-role middle-author">Middle Author</span>
+                        <span class="pub-if">IF: 15.9</span>
+                        <span class="pub-if">2024</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+                <div class="pub-card">
+                    <div class="pub-title">Extracellular vesicle microRNAs contribute to Notch signaling pathway in T-cell acute lymphoblastic leukemia</div>
+                    <div class="pub-journal">Molecular Cancer</div>
+                    <div class="pub-meta">
+                        <span class="pub-role middle-author">Middle Author</span>
+                        <span class="pub-if">IF: 37.3</span>
+                        <span class="pub-if">2022</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" data-aos="fade-up" data-aos-delay="150">
+                <div class="pub-card">
+                    <div class="pub-title">Noncanonical &beta;-catenin interactions promote leukemia-initiating activity in early T-cell acute lymphoblastic leukemia</div>
+                    <div class="pub-journal">Blood</div>
+                    <div class="pub-meta">
+                        <span class="pub-role middle-author">Middle Author</span>
+                        <span class="pub-if">IF: 23.1</span>
+                        <span class="pub-if">2021</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" data-aos="fade-up" data-aos-delay="200">
+                <div class="pub-card">
+                    <div class="pub-title">Targeting leukemia-initiating cells in acute lymphoblastic leukemia</div>
+                    <div class="pub-journal">Cancer Research</div>
+                    <div class="pub-meta">
+                        <span class="pub-role first-author">First Author</span>
+                        <span class="pub-if">IF: 16.6</span>
+                        <span class="pub-if">2021</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" data-aos="fade-up" data-aos-delay="250">
+                <div class="pub-card">
+                    <div class="pub-title">Altered RNA export by SF3B1 mutants confers sensitivity to nuclear export inhibition</div>
+                    <div class="pub-journal">Leukemia</div>
+                    <div class="pub-meta">
+                        <span class="pub-role middle-author">Middle Author</span>
+                        <span class="pub-if">IF: 13.4</span>
+                        <span class="pub-if">2024</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" data-aos="fade-up" data-aos-delay="300">
+                <div class="pub-card">
+                    <div class="pub-title">Microfluidic-enhanced 3D bioprinting of aligned myoblast-laden hydrogels leads to functionally organized myofibers in vitro and in vivo</div>
+                    <div class="pub-journal">Biomaterials</div>
+                    <div class="pub-meta">
+                        <span class="pub-role middle-author">Middle Author</span>
+                        <span class="pub-if">IF: 15.3</span>
+                        <span class="pub-if">2017</span>
+                        <span class="pub-if">Cited by 364</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="personal">
+    <div class="container">
+        <h2 class="mb-5" data-aos="fade-left">Personal <span class="highlight">Projects</span></h2>
+        <div class="row g-4">
+            <div class="col-md-3" data-aos="zoom-in">
+                <div class="glass-panel h-100">
+                    <span class="project-category">MOBILE APP &bull; MUSIC</span>
+                    <h3 class="h4">Absolute PitcheD</h3>
+                    <p class="text-secondary">A comprehensive training platform for perfect pitch. Built with React Expo for cross-platform availability (Android & Web), featuring advanced performance analytics such as semitone distance tracking for failed guesses.</p>
+                    <div class="mt-3">
+                        <span class="badge bg-dark border border-info">React Native</span>
+                        <span class="badge bg-dark border border-info">Expo</span>
+                        <span class="badge bg-dark border border-info">TypeScript</span>
+                        <span class="badge bg-dark border border-info">Analytics</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="zoom-in" data-aos-delay="100">
+                <div class="glass-panel h-100">
+                    <span class="project-category">DEVOPS &bull; DOCUMENTATION</span>
+                    <h3 class="h4">UOL (Unified Ops Language)</h3>
+                    <p class="text-secondary">A lightweight, human-first system for standardizing technical procedures. UOL converts free-form notes into structured YAML workflows to generate human-readable manuals and machine-interpretable documentation for AI-assisted automation.</p>
+                    <div class="mt-3">
+                        <span class="badge bg-dark border border-info">YAML</span>
+                        <span class="badge bg-dark border border-info">Python</span>
+                        <span class="badge bg-dark border border-info">Markdown</span>
+                        <span class="badge bg-dark border border-info">AI/LLM Parsing</span>
+                        <span class="badge bg-dark border border-info">Git</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="zoom-in" data-aos-delay="200">
+                <div class="glass-panel h-100">
+                    <span class="project-category">AI TOOL &bull; CODE ANALYSIS</span>
+                    <h3 class="h4">codeDflow</h3>
+                    <p class="text-secondary">An LLM-powered tool to reverse-engineer undocumented pipelines. It parses multi-language repositories (Python, R, Bash), uses GPT-4o to resolve cross-file dependencies via context-aware reasoning, and generates structural Graphviz flowcharts.</p>
+                    <div class="mt-3">
+                        <span class="badge bg-dark border border-info">Streamlit</span>
+                        <span class="badge bg-dark border border-info">OpenAI SDK</span>
+                        <span class="badge bg-dark border border-info">Python</span>
+                        <span class="badge bg-dark border border-info">Graphviz</span>
+                        <span class="badge bg-dark border border-info">AI/LLM Parsing</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="zoom-in" data-aos-delay="300">
+                <div class="glass-panel h-100">
+                    <span class="project-category">STEALTH &bull; AI PSYCHOLOGY</span>
+                    <h3 class="h4">Nosce Te Ipsum <span class="badge bg-danger ms-2" style="font-size: 0.5rem;">STEALTH</span></h3>
+                    <p class="text-secondary">AI-driven self-discovery platform integrating SOTA psychological assessments and machine learning to predict compatible friendships, relationships, and collaborators. Features personalized AI journey with life improvement recommendations aligned to your goals and nature.</p>
+                    <div class="mt-3">
+                        <span class="badge bg-dark border border-info">React Native</span>
+                        <span class="badge bg-dark border border-info">Expo</span>
+                        <span class="badge bg-dark border border-info">Machine Learning</span>
+                        <span class="badge bg-dark border border-info">Psychology</span>
+                        <span class="badge bg-dark border border-info">AI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <div class="container">
+        <h2 class="text-center mb-2" data-aos="fade-up">Get In <span class="highlight">Touch</span></h2>
+        <p class="text-center text-secondary mb-5" data-aos="fade-up">Let's discuss how we can collaborate on exciting bioinformatics projects</p>
+        <div class="row g-4">
+            <div class="col-md-6" data-aos="fade-right">
+                <div class="contact-card">
+                    <h3 class="h4 mb-3">Let's Connect</h3>
+                    <p class="text-secondary">I'm always interested in discussing new opportunities, research collaborations, or just chatting about the latest developments in bioinformatics and data science.</p>
+                    <div class="mt-4">
+                        <a href="https://linkedin.com/in/ftamiro" target="_blank" class="social-link">
+                            <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            LinkedIn
+                        </a>
+                        <a href="https://github.com/ftamiro" target="_blank" class="social-link">
+                            <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" data-aos="fade-left">
+                <div class="contact-card">
+                    <h3 class="h4 mb-3">Contact Me</h3>
+                    <p class="text-secondary">Feel free to reach out to me directly via email:</p>
+                    <div class="contact-email">francesco.tamiro@gmail.com</div>
+                    <a href="mailto:francesco.tamiro@gmail.com" class="btn-accent d-block text-center text-decoration-none mt-3">Send Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="text-center">
+    <div class="container">
+        <div class="d-flex justify-content-center gap-4 mb-3">
+            <a href="https://linkedin.com/in/ftamiro" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://github.com/ftamiro" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </a>
+        </div>
+        <p class="small" style="color: rgba(255,255,255,0.4);">&copy; 2026 Francesco Tamiro. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000 });
+
+    // BACKGROUND ANIMATION — Constellation Particle System
+    const bgCanvas = document.createElement('canvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    document.getElementById('canvas-container').appendChild(bgCanvas);
+    bgCanvas.style.width = '100%';
+    bgCanvas.style.height = '100%';
+
+    function resizeCanvas() {
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+
+    const PARTICLE_COUNT = 100;
+    const CONNECTION_DIST = 140;
+    const MOUSE_INFLUENCE = 180;
+    let mousePos = { x: -1000, y: -1000 };
+    let targetMouse = { x: -1000, y: -1000 };
+
+    class Star {
+        constructor() {
+            this.x = Math.random() * bgCanvas.width;
+            this.y = Math.random() * bgCanvas.height;
+            this.vx = (Math.random() - 0.5) * 0.25;
+            this.vy = (Math.random() - 0.5) * 0.25;
+            this.r = Math.random() * 1.8 + 0.4;
+            this.baseOpacity = Math.random() * 0.4 + 0.2;
+            this.pulseSpeed = Math.random() * 0.02 + 0.005;
+            this.pulseOffset = Math.random() * Math.PI * 2;
+        }
+
+        update(time) {
+            const dx = this.x - mousePos.x;
+            const dy = this.y - mousePos.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < MOUSE_INFLUENCE && dist > 0) {
+                const force = (MOUSE_INFLUENCE - dist) / MOUSE_INFLUENCE;
+                this.vx += (dx / dist) * force * 0.008;
+                this.vy += (dy / dist) * force * 0.008;
+            }
+
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vx *= 0.998;
+            this.vy *= 0.998;
+
+            if (this.x < -10) this.x = bgCanvas.width + 10;
+            if (this.x > bgCanvas.width + 10) this.x = -10;
+            if (this.y < -10) this.y = bgCanvas.height + 10;
+            if (this.y > bgCanvas.height + 10) this.y = -10;
+
+            this.opacity = this.baseOpacity + Math.sin(time * this.pulseSpeed + this.pulseOffset) * 0.15;
+        }
+
+        draw() {
+            bgCtx.beginPath();
+            bgCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            bgCtx.fillStyle = `rgba(0, 210, 255, ${this.opacity})`;
+            bgCtx.fill();
+        }
+    }
+
+    const stars = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) stars.push(new Star());
+
+    let animTime = 0;
+    function animateBg() {
+        animTime++;
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+        // Smooth mouse tracking (lerp)
+        mousePos.x += (targetMouse.x - mousePos.x) * 0.08;
+        mousePos.y += (targetMouse.y - mousePos.y) * 0.08;
+
+        for (const s of stars) { s.update(animTime); s.draw(); }
+
+        // Constellation lines
+        for (let i = 0; i < stars.length; i++) {
+            for (let j = i + 1; j < stars.length; j++) {
+                const dx = stars[i].x - stars[j].x;
+                const dy = stars[i].y - stars[j].y;
+                const d = Math.sqrt(dx * dx + dy * dy);
+                if (d < CONNECTION_DIST) {
+                    const alpha = (1 - d / CONNECTION_DIST) * 0.12;
+                    bgCtx.beginPath();
+                    bgCtx.strokeStyle = `rgba(0, 210, 255, ${alpha})`;
+                    bgCtx.lineWidth = 0.5;
+                    bgCtx.moveTo(stars[i].x, stars[i].y);
+                    bgCtx.lineTo(stars[j].x, stars[j].y);
+                    bgCtx.stroke();
+                }
+            }
+        }
+
+        requestAnimationFrame(animateBg);
+    }
+
+    document.addEventListener('mousemove', (e) => {
+        targetMouse.x = e.clientX;
+        targetMouse.y = e.clientY;
+    });
+
+    document.addEventListener('mouseleave', () => {
+        targetMouse.x = -1000;
+        targetMouse.y = -1000;
+    });
+
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        stars.forEach(s => {
+            if (s.x > bgCanvas.width) s.x = Math.random() * bgCanvas.width;
+            if (s.y > bgCanvas.height) s.y = Math.random() * bgCanvas.height;
+        });
+    });
+
+    animateBg();
+
+    // CHARTING ENGINE
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: 'white', font: { family: 'Inter' } } } },
+        scales: {
+            y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } },
+            x: { 
+                grid: { display: false }, 
+                ticks: { 
+                    color: 'rgba(255,255,255,0.7)',
+                    maxRotation: 0,
+                    minRotation: 0,
+                    font: { size: 10 }
+                } 
+            }
+        }
+    };
+
+    new Chart(document.getElementById('gradesChart'), {
+        type: 'bar',
+        data: {
+            labels: ['BSc', 'MSc'],
+            datasets: [{
+                label: 'Francesco',
+                data: [28.3, 30.0],
+                backgroundColor: '#00d2ff',
+                borderRadius: 6
+            }, {
+                label: 'National Avg',
+                data: [25.1, 27.7],
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: 6
+            }]
+        },
+        options: { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, min: 20, max: 31 } } }
+    });
+
+    new Chart(document.getElementById('speedChart'), {
+        type: 'bar',
+        data: {
+            labels: ['BSc (yrs)', 'MSc (yrs)'],
+            datasets: [{
+                label: 'Francesco',
+                data: [2.75, 1.73],
+                backgroundColor: '#00d2ff',
+                borderRadius: 6
+            }, {
+                label: 'National Avg',
+                data: [5.1, 2.7],
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: 6
+            }]
+        },
+        options: commonOptions
+    });
+
+    new Chart(document.getElementById('fundingChart'), {
+        type: 'bar',
+        data: {
+            labels: ['National Avg', 'Francesco Tamiro'],
+            datasets: [{
+                label: 'Annual Gross (€)',
+                data: [15343.28, 30000],
+                backgroundColor: ['rgba(255,255,255,0.2)', '#00d2ff'],
+                borderRadius: 6
+            }]
+        },
+        options: commonOptions
+    });
+
+    new Chart(document.getElementById('ifChart'), {
+        type: 'bar',
+        data: {
+            labels: [
+                ['Global/National', 'Avg'],
+                ['University of Rome', 'Tor Vergata', '(Biology Dept.)'],
+                ['IRCCS Casa Sollievo', 'della Sofferenza'],
+                ['Francesco Tamiro', '(Blood)']
+            ],
+            datasets: [{
+                label: 'Impact Factor',
+                data: [4.35, 5.45, 6.81, 23.1],
+                backgroundColor: ['rgba(255,255,255,0.2)', 'rgba(255,255,255,0.2)', 'rgba(255,255,255,0.2)', '#00d2ff'],
+                borderRadius: 6
+            }]
+        },
+        options: commonOptions
+    });
+</script>
+
+</body>
+</html>
