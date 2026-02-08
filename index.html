@@ -215,7 +215,7 @@
             <div class="col-lg-8 order-lg-1" data-aos="fade-right">
                 <p class="mb-0 highlight">Biomedical Data Scientist II</p>
                 <h1 class="display-1 fw-bold">Francesco Tamiro</h1>
-                <p class="lead text-secondary mt-2">AI & Biomedical Data Science Architect with deep expertise in <span class="text-white">single-cell genomics</span> and <span class="text-white">NGS pipelines</span>. Specialized in translating complex computational analyses into production-grade, AI-first, FAIR-compliant <span class="text-white">data platforms & infrastructure</span> that democratize advanced bioinformatics for researchers, clinicians, and the broader scientific community. <span class="text-white">EB-1A (Extraordinary Ability, First Preference) Green Card Holder</span>.</p>
+                <p class="lead text-secondary mt-2"><span class="text-white">AI & Biomedical Data Science Architect</span> with deep expertise in <span class="text-white">single-cell genomics</span> and <span class="text-white">NGS pipelines</span>. Specialized in translating complex computational analyses into production-grade, AI-first, FAIR-compliant <span class="text-white">data platforms & infrastructure</span> that democratize advanced bioinformatics for researchers, clinicians, and the broader scientific community. <span class="text-white">EB-1A (Extraordinary Ability, First Preference) Green Card Holder</span>.</p>
                 
                 <div class="mt-4 skills-header">
                     <div class="skill-group">
@@ -587,7 +587,7 @@
     }
     resizeCanvas();
 
-    const PARTICLE_COUNT = 100;
+    const PARTICLE_COUNT = 160;
     const CONNECTION_DIST = 140;
     const MOUSE_INFLUENCE = 180;
     let mousePos = { x: -1000, y: -1000 };
@@ -692,19 +692,21 @@
     animateBg();
 
     // CHARTING ENGINE
+    const isMobile = window.innerWidth < 768;
     const commonOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: 'white', font: { family: 'Inter' } } } },
+        plugins: { legend: { labels: { color: 'white', font: { family: 'Inter', size: isMobile ? 10 : 12 } } } },
         scales: {
-            y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)' } },
+            y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'rgba(255,255,255,0.7)', font: { size: isMobile ? 9 : 12 } } },
             x: { 
                 grid: { display: false }, 
                 ticks: { 
                     color: 'rgba(255,255,255,0.7)',
                     maxRotation: 0,
                     minRotation: 0,
-                    font: { size: 10 }
+                    autoSkip: false,
+                    font: { size: isMobile ? 7 : 10 }
                 } 
             }
         }
